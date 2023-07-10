@@ -287,6 +287,12 @@ files:
 - name: src/tasklist/Menu.kt
   visible: true
   learner_created: true
+- name: src/tasklist/MyTasks.txt
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/18595#comment
-status: Unchecked
-record: -1
+status: Solved
+feedback:
+  message: Congratulations!
+  time: "Mon, 10 Jul 2023 13:19:15 UTC"
+record: 2

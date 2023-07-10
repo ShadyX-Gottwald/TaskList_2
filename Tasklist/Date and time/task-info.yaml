@@ -316,6 +316,118 @@ files:
 
 
   learner_created: false
+- name: src/tasklist/Menu.kt
+  visible: true
+  text: |-
+    package tasklist
+    import java.util.Scanner;
+    import kotlin.system.exitProcess;
+
+    interface MenuFunction {
+        val scanner: Scanner
+            get() = Scanner(System.`in`)
+
+        fun getAction(scanner: Scanner,taskManager: TaskManager): Unit
+    }
+
+    enum class Menu(val mode: String):MenuFunction {
+
+        ADD("add") {
+            override fun getAction(scanner: Scanner, taskManager: TaskManager): Unit {
+                val tasks = ArrayList<Task>()
+                println("Input a new task (enter a blank line to end):")
+
+                while (scanner.hasNextLine()) {
+                    val task = scanner.nextLine()
+                        .lineSequence()
+                        .joinToString()
+                        .trim()
+
+                    //Add to local list
+
+                    val item = tasks.add(Task(task))
+                    if(tasks.get(0) == Task("")) { println("The task is blank"); return }
+
+                    if (task.isBlank()) {
+                        taskManager.addTasks(tasks)
+                        return
+                    }
+                }
+            }
+        },
+        END("end") {
+            override fun getAction(scanner: Scanner,taskManager: TaskManager) {
+                println("Tasklist exiting!")
+                exitProcess(0)
+            }
+        } ,
+        PRINT("print") {
+            override fun getAction(scanner: Scanner, taskManager: TaskManager) {
+
+                if(taskManager.size == 0) {
+                    println("No tasks have been input")
+                    return
+                }
+                taskManager.showTasks()
+
+            }
+        },
+        OTHER("") {
+            override fun getAction(scan: Scanner, taskManager: TaskManager) {
+               println("The input action is invalid")
+                return
+            }
+        }
+    }
+  learner_created: true
+- name: src/tasklist/TaskManager.kt
+  visible: true
+  text: |-
+    package tasklist
+
+    class  TaskManager  {
+
+        private val allTasks = ArrayList<ArrayList<Task>>()
+         val size: Int
+            get() = this.allTasks.size
+
+       // fun addTask(task: Task) = taskList.add(task);
+
+        fun showTasks() = allTasks.forEachIndexed{ index: Int, task: ArrayList<Task> ->
+            println(
+                if(index+1 <=9) "${index+1}  ${task[0]}" else "${index+1} ${task[0]}"+ "\n"
+            )
+            for(i in 1 until task.size-1){
+                println("   ${task[i].content}")
+            }
+            println("")
+        }
+
+        fun addTasks( tasks: ArrayList<Task> ){
+            if(tasks.isEmpty()) throw IllegalStateException("The task is blank")
+            this.allTasks.add(tasks)
+        }
+    }
+  learner_created: true
+- name: src/tasklist/Task.kt
+  visible: true
+  text: |-
+    package tasklist
+
+
+    data class Task(val content: String) {
+
+        override fun toString(): String = content
+    }
+  learner_created: true
+- name: src/tasklist/MyTasks.txt
+  visible: true
+  text: |2-
+     Present for friend birthday
+     Check new software
+     Pay phone bill
+     Fix my printer
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/18596#comment
 status: Unchecked
 record: -1

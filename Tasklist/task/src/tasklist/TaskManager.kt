@@ -1,18 +1,25 @@
 package tasklist
 
-class  TaskManager (
-    private var taskList: ArrayList<Task>
-){
-    val size: Int
-        get() = this.taskList.size
+class  TaskManager  {
 
-    fun addTask(task: Task) = taskList.add(task);
+    private val allTasks = ArrayList<ArrayList<Task>>()
+     val size: Int
+        get() = this.allTasks.size
 
-    fun showTasks() = taskList.forEachIndexed{ index: Int, task: Task ->
+   // fun addTask(task: Task) = taskList.add(task);
+
+    fun showTasks() = allTasks.forEachIndexed{ index: Int, task: ArrayList<Task> ->
         println(
-            if(index+1 <=9) "${index+1}  $task" else "${index+1} $task"
+            if(index+1 <=9) "${index+1}  ${task[0]}" else "${index+1} ${task[0]}"+ "\n"
         )
+        for(i in 1 until task.size-1){
+            println("   ${task[i].content}")
+        }
+        println("")
     }
 
-
+    fun addTasks( tasks: ArrayList<Task> ){
+        if(tasks.isEmpty()) throw IllegalStateException("The task is blank")
+        this.allTasks.add(tasks)
+    }
 }
